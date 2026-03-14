@@ -6,7 +6,7 @@ function productCardTemplate(product) {
             <img src="${product.Image}" alt="image of ${product.Name}">
             <h2>${product.Brand.Name}</h2>
             <h3>${product.Name}</h3>
-            <p clas="product-card_price">${priduct.FinalPrice}</p>
+            <p clas="product-card_price">${product.FinalPrice}</p>
         </a>
     </li>`;
 };
