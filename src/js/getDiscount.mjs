@@ -1,3 +1,6 @@
+
+
+
 export function getDiscount(price) {
     const xmasPerc = 3 / 100;
     const easterPerc = 2 / 100;

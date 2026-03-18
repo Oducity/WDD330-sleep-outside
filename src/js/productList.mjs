@@ -1,5 +1,4 @@
 import { renderListWithTemplate } from "./utils.mjs";
-import { getDiscount } from "./getDiscount.mjs";
 
 function productCardTemplate(product) {
     return `<li class="product-card">
@@ -8,9 +7,9 @@ function productCardTemplate(product) {
             <h2>${product.Brand.Name}</h2>
             <h3>${product.Name}</h3>
             <p clas="product-card_price">${product.FinalPrice}</p>
-            <p>Disc: 3%</p>
         </a>
     </li>`;
+    
 };
 
 
@@ -28,5 +27,6 @@ export default class productList {
 
     renderList(list) {
         renderListWithTemplate(productCardTemplate, this.listElement, list);
+
     }
 }
