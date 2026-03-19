@@ -1,9 +1,5 @@
-import productList from "./productList.mjs";
+import ProductList from "./productList.mjs";
 import productData from "./ProductData.mjs";
-
-
-
-
 
 const comingData = new productData("tents");
 const element = document.querySelector(".parent-list");
