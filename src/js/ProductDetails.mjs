@@ -46,8 +46,13 @@ function productDetailsTemplate(product) {
   const productImage = document.getElementById("productImage");
   productImage.src = product.Images?.PrimaryLarge || product.Image;
   productImage.alt = product.NameWithoutBrand;
-
   document.getElementById("productPrice").textContent = product.FinalPrice;
+  if (product.SuggestedRetailPrice > product.FinalPrice) {
+    const span = document.createElement("span");
+    const discount = product.SuggestedRetailPrice - product.FinalPrice;
+    span.innerText = `Discount: ${discount}`;
+    document.getElementById("productPrice").appendChild(span);
+  }
   document.getElementById("productColor").textContent = product.Colors[0].ColorName;
   document.getElementById("productDesc").innerHTML = product.DescriptionHtmlSimple;
 
