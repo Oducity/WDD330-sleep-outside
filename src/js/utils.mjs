@@ -38,16 +38,28 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
-async function loadTemplate(path, targetElement) {
+export function renderWithTemplate(template, parentElement, data, callback) {
+  // if clear is true we need to clear out the contents of the parent.
+  parentElement.innerHTML = template;
+  if (callback) {
+    callback(data);
+  }
+}
+
+async function loadTemplate(path) {
   const response = await fetch(path);
-  if (!response.ok) throw new Error(`Could not load ${path}`);
-  const html = await response.text();
-  targetElement.innerHTML = html;
+  const template = await response.text();
+  return template;
 }
 
 export async function loadHeaderFooter() {
+  const headerTemplate = await loadTemplate("../partials/header.html");
   const headerElement = document.querySelector("#main-header");
+  renderWithTemplate(headerTemplate, headerElement);
+
+  const footerTemplate = await loadTemplate("../partials/footer.html");
   const footerElement = document.querySelector("#main-footer");
+  renderWithTemplate(footerTemplate, footerElement);
 
   try {
     if (headerElement) {
