@@ -23,7 +23,12 @@ export default class ProductDetails {
     if (existingItem) {
       existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
     } else {
-      cartItems.push({ ...this.product, quantity: 1 });
+      const cartProduct = {
+        ...this.product,
+        Image: this.product.Images?.PrimaryMedium || this.product.Image,
+        quantity: 1,
+      };
+      cartItems.push(cartProduct);
     }
 
     setLocalStorage(CART_KEY, cartItems);
@@ -39,7 +44,7 @@ function productDetailsTemplate(product) {
   document.querySelector("h3").textContent = product.NameWithoutBrand;
 
   const productImage = document.getElementById("productImage");
-  productImage.src = product.Image;
+  productImage.src = product.Images?.PrimaryLarge || product.Image;
   productImage.alt = product.NameWithoutBrand;
 
   document.getElementById("productPrice").textContent = product.FinalPrice;
