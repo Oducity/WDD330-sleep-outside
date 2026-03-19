@@ -7,6 +7,5 @@ import productData from "./ProductData.mjs";
 
 const comingData = new productData("tents");
 const element = document.querySelector(".parent-list");
-const productList = new productList("Tents", comingData, element);
-
-productList.init();
+const productListInstance = new ProductList("Tents", comingData, element);
+productListInstance.init();
