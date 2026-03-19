@@ -37,3 +37,27 @@ export function renderListWithTemplate(templateFn, parentElement, list, position
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
+
+async function loadTemplate(path, targetElement) {
+  const response = await fetch(path);
+  if (!response.ok) throw new Error(`Could not load ${path}`);
+  const html = await response.text();
+  targetElement.innerHTML = html;
+}
+
+export async function loadHeaderFooter() {
+  const headerElement = document.querySelector("#main-header");
+  const footerElement = document.querySelector("#main-footer");
+
+  try {
+    if (headerElement) {
+      await loadTemplate("/partials/header.html", headerElement);
+    }
+    if (footerElement) {
+      await loadTemplate("/partials/footer.html", footerElement);
+    }
+  } catch (error) {
+    // eslint-disable-next-line no-console
+    console.error(error);
+  }
+}
