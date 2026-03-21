@@ -7,6 +7,8 @@ const alertData = new alert("../public/json/alert.json");
 const dataSource = new ProductData();
 const productID = getParam("product");
 
+
+alertData.getAlertData();
 const product = new ProductDetails(productID, dataSource);
 product.init();
 
@@ -21,4 +23,4 @@ product.init();
 //    .getElementById("addToCart")
 //    .addEventListener("click", addToCartHandler);
 loadHeaderFooter();
-alertData.getAlertData();
+
