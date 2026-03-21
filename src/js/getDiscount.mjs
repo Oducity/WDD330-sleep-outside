@@ -3,11 +3,11 @@ export function getDiscount(price) {
   const easterPerc = 2 / 100;
   const date = new Date();
   let value = 1;
-  const month = date.toLocaleString("default", { month: "long" });
+  const monthIndex = date.getMonth(); // 0 = January, 1 = February, 2 = March, 3 = April, ...
 
-  if (month === "March" && price >= 170) {
+  if (monthIndex === 2 && price >= 170) {
     value = price * xmasPerc;
-  } else if (month === "April" && price >= 170) {
+  } else if (monthIndex === 3 && price >= 170) {
     value = price * easterPerc;
   }
 
