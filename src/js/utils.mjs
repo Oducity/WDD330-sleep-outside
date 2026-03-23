@@ -1,19 +1,19 @@
-// wrapper for querySelector...returns matching element
+// Wrapper for querySelector...returns matching element
 export function qs(selector, parent = document) {
   return parent.querySelector(selector);
 }
-// or a more concise version if you are into that sort of thing:
-// export const qs = (selector, parent = document) => parent.querySelector(selector);
 
-// retrieve data from localstorage
+// Retrieve data from localStorage
 export function getLocalStorage(key) {
   return JSON.parse(localStorage.getItem(key));
 }
-// save data to local storage
+
+// Save data to localStorage
 export function setLocalStorage(key, data) {
   localStorage.setItem(key, JSON.stringify(data));
 }
-// set a listener for both touchend and click
+
+// Set a listener for both touchend and click
 export function setClick(selector, callback) {
   qs(selector).addEventListener("touchend", (event) => {
     event.preventDefault();
@@ -22,54 +22,56 @@ export function setClick(selector, callback) {
   qs(selector).addEventListener("click", callback);
 }
 
+// Get URL parameter value
 export function getParam(param) {
   const queryString = window.location.search;
   const urlParams = new URLSearchParams(queryString);
-  const product = urlParams.get(param)
-  return product;
+  return urlParams.get(param);
 }
 
-export function renderListWithTemplate(templateFn, parentElement, list, position = "afterbegin", clear = false) {
+// Render a list of items using a template function
+export function renderListWithTemplate(
+  templateFn,
+  parentElement,
+  list,
+  position = "afterbegin",
+  clear = false
+) {
   const htmlStrings = list.map(templateFn);
-  // if clear is true we need to clear out the contents of the parent.
   if (clear) {
     parentElement.innerHTML = "";
   }
   parentElement.insertAdjacentHTML(position, htmlStrings.join(""));
 }
 
+// Render a single template into a parent element
 export function renderWithTemplate(template, parentElement, data, callback) {
-  // if clear is true we need to clear out the contents of the parent.
   parentElement.innerHTML = template;
   if (callback) {
     callback(data);
   }
 }
 
-async function loadTemplate(path) {
-  const response = await fetch(path);
-  const template = await response.text();
+// Fetch an HTML template file and return it as text
+export async function loadTemplate(path) {
+  const res = await fetch(path);
+  const template = await res.text();
   return template;
 }
 
+// Load and render header and footer templates
 export async function loadHeaderFooter() {
-  const headerTemplate = await loadTemplate("../partials/header.html");
+  // Load header
+  const headerTemplate = await loadTemplate("/partials/header.html");
   const headerElement = document.querySelector("#main-header");
-  renderWithTemplate(headerTemplate, headerElement);
+  if (headerElement) {
+    renderWithTemplate(headerTemplate, headerElement);
+  }
 
-  const footerTemplate = await loadTemplate("../partials/footer.html");
+  // Load footer
+  const footerTemplate = await loadTemplate("/partials/footer.html");
   const footerElement = document.querySelector("#main-footer");
-  renderWithTemplate(footerTemplate, footerElement);
-
-  try {
-    if (headerElement) {
-      await loadTemplate("/partials/header.html", headerElement);
-    }
-    if (footerElement) {
-      await loadTemplate("/partials/footer.html", footerElement);
-    }
-  } catch (error) {
-    // eslint-disable-next-line no-console
-    console.error(error);
+  if (footerElement) {
+    renderWithTemplate(footerTemplate, footerElement);
   }
 }
