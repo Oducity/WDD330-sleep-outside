@@ -1,7 +1,7 @@
 import { renderListWithTemplate } from "./utils.mjs";
 
 function productCardTemplate(product) {
-  return 
+  return `
     <li class="product-card">
       <a href="/product_pages/index.html?product=${product.Id}">
         <img src="${product.Images?.PrimaryMedium || product.Image}" alt="${product.Name}">
@@ -10,7 +10,7 @@ function productCardTemplate(product) {
         <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
     </li>
-    `;
+  `;
 }
 
 export default class ProductList {
@@ -25,6 +25,7 @@ export default class ProductList {
     this.products = await this.dataSource.getData(this.category);
     this.renderList(this.products);
   }
+
   sortBy(sortValue) {
     const sorted = [...this.products];
 
@@ -47,6 +48,7 @@ export default class ProductList {
 
     this.renderList(sorted);
   }
+
   renderList(list) {
     renderListWithTemplate(
       productCardTemplate,
