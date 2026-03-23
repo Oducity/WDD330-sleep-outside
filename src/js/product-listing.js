@@ -9,4 +9,11 @@ const dataSource = new ProductData();
 const element = document.querySelector(".product-list");
 const listing = new ProductList(category, dataSource, element);
 
-listing.init();
+await listing.init();
+
+const sortSelect = document.querySelector("#sortProducts");
+if (sortSelect) {
+  sortSelect.addEventListener("change", (event) => {
+    listing.sortBy(event.target.value);
+  });
+}
