@@ -1,41 +1,39 @@
 <!doctype html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Sleep Outside | Product</title>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Sleep Outside | Product</title>
+    <link rel="stylesheet" href="../css/style.css" />
+    <script src="../js/product.js" type="module"></script>
+  </head>
 
-  <link rel="stylesheet" href="../css/style.css" />
-  <script src="../js/product.js" type="module"></script>
-</head>
+  <body>
+    <!-- DINAMIC HEADER -->
+    <header id="main-header" class="divider"></header>
 
-<body>
-  <!-- DINAMIC HEADER -->
-  <header id="main-header" class="divider"></header>
+    <main class="divider">
+      <section class="product-detail">
+        <h3 id="brandName"></h3>
 
-  <main class="divider">
-    <section class="product-detail">
-      <h3 id="brandName"></h3>
+        <h2 class="divider" id="productName"></h2>
 
-      <h2 class="divider" id="productName"></h2>
+        <img id="productImage" class="divider" src="" alt="" />
 
-      <img id="productImage" class="divider" src="" alt="" />
+        <p id="productPrice" class="product-card__price"></p>
 
-      <p id="productPrice" class="product-card__price"></p>
+        <p id="productColor" class="product__color"></p>
 
-      <p id="productColor" class="product__color"></p>
+        <p id="productDesc" class="product__description"></p>
 
-      <p id="productDesc" class="product__description"></p>
+        <div class="product-detail__add">
+          <button id="addToCart">Add to Cart</button>
+        </div>
+      </section>
+    </main>
 
-      <div class="product-detail__add">
-        <button id="addToCart">Add to Cart</button>
-      </div>
-    </section>
-  </main>
-
-  <!-- DINAMIC FOOTER-->
-  <footer id="main-footer"></footer>
-</body>
-
+    <!-- DINAMIC FOOTER-->
+    <footer id="main-footer"></footer>
+  </body>
 </html>
