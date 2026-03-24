@@ -87,7 +87,6 @@ if (productListEl) {
 // </li>`;
 // }
 
-
 // function renderCartContents() {
 //   const cartItems = normalizeCartItems(getCartItems());
 //   saveCartItems(cartItems);
