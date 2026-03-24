@@ -1,8 +1,7 @@
 import ProductData from "./ProductData.mjs";
-import ProductList from "./ProductData.mjs";
-import alert from "./alert.mjs";
+import ProductList from "./ProductList.mjs";
 
-const alertData = new alert("../public/json/alert.json");
+// Product list setup
 const dataSource = new ProductData("tents");
 const element = document.querySelector(".product-list");
 const productList = new ProductList("Tents", dataSource, element);

@@ -1,37 +1,125 @@
-import { renderListWithTemplate } from "./utils.mjs";
+import {
+  getLocalStorage,
+  setLocalStorage,
+  renderListWithTemplate,
+} from "./utils.mjs";
 
-function productCardTemplate(product) {
-  return `
-    <li class="product-card">
-      <a href="product_pages/?products=${product.Id}">
-        <img src="${product.Image}" alt="${product.Name}">
-        <h2>${product.Brand.Name}</h2>
-        <h3>${product.NameWithoutBrand}</h3>
-        <p class="product-card__price">$${product.FinalPrice}</p>
-      </a>
-    </li>
-    `;
+const CART_KEY = "so-cart";
+
+function cartItemTemplate(item) {
+  const quantity = Number(item.quantity) || 1;
+  const unitPrice = Number(item.FinalPrice || 0);
+  const lineTotal = quantity * unitPrice;
+  const image = item.Image || item.Images?.PrimaryMedium || "";
+
+  return `<li class="cart-card divider" data-id="${item.Id}">
+    <button class="cart-remove" type="button" data-id="${item.Id}" aria-label="Remove ${item.Name}">
+      &times;
+    </button>
+    <a href="/product_pages/index.html?product=${item.Id}" class="cart-card__image">
+      <img src="${image}" alt="${item.Name}" />
+    </a>
+    <a href="/product_pages/index.html?product=${item.Id}">
+      <h2 class="card__name">${item.Name}</h2>
+    </a>
+    <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
+    <p class="cart-card__quantity">qty: ${quantity}</p>
+    <p class="cart-card__price">$${lineTotal.toFixed(2)}</p>
+  </li>`;
 }
 
-export default class ProductList {
-  constructor(category, dataSource, listElement) {
-    this.category = category;
-    this.dataSource = dataSource;
+export default class ShoppingCart {
+  constructor(listElement, cartKey = CART_KEY) {
     this.listElement = listElement;
+    this.cartKey = cartKey;
   }
 
-  async init() {
-    const list = await this.dataSource.getData();
-    this.renderList(list);
+  init() {
+    this.renderCartContents();
+    this.addEventListeners();
   }
 
-  renderList(list) {
-    // const htmlStrings = list.map(productCardTemplate);
-    // this.listElement.insertAdjacentHTML("afterbegin", htmlStrings.join(""));
-
-    // apply use new utility function instead of the commented code above
-    renderListWithTemplate(productCardTemplate, this.listElement, list);
-
+  getCartItems() {
+    return getLocalStorage(this.cartKey) || [];
   }
 
+  saveCartItems(items) {
+    setLocalStorage(this.cartKey, items);
+  }
+
+  normalizeCartItems(items) {
+    return items.reduce((normalized, item) => {
+      if (!item || !item.Id || !item.Name) return normalized;
+
+      const existing = normalized.find((product) => product.Id === item.Id);
+      const quantity = Number(item.quantity) || 1;
+      const image = item.Image || item.Images?.PrimaryMedium || "";
+
+      if (existing) {
+        existing.quantity += quantity;
+      } else {
+        normalized.push({ ...item, Image: image, quantity });
+      }
+      return normalized;
+    }, []);
+  }
+
+  calculateTotal(items) {
+    return items.reduce(
+      (sum, item) => sum + (Number(item.quantity) || 1) * Number(item.FinalPrice || 0),
+      0,
+    );
+  }
+
+  updateCartFooter(items) {
+    const footer = document.querySelector(".cart-footer");
+    const totalElement = document.querySelector(".cart-total");
+    if (!footer || !totalElement) return;
+
+    if (!items.length) {
+      footer.classList.add("hide");
+      totalElement.textContent = "Total: ";
+      return;
+    }
+
+    footer.classList.remove("hide");
+    totalElement.textContent = `Total: $${this.calculateTotal(items).toFixed(2)}`;
+  }
+
+  renderCartContents() {
+    const items = this.normalizeCartItems(this.getCartItems());
+    this.saveCartItems(items);
+
+    this.listElement.innerHTML = "";
+    renderListWithTemplate(cartItemTemplate, this.listElement, items);
+
+    this.updateCartFooter(items);
+  }
+
+  removeCartItem(id) {
+    const items = this.normalizeCartItems(this.getCartItems());
+    const existing = items.find((item) => item.Id === id);
+    if (!existing) return;
+
+    if (existing.quantity > 1) {
+      existing.quantity -= 1;
+      this.saveCartItems(items);
+    } else {
+      this.saveCartItems(items.filter((item) => item.Id !== id));
+    }
+
+    this.renderCartContents();
+  }
+
+  addEventListeners() {
+    this.listElement.addEventListener("click", (event) => {
+      const removeButton = event.target.closest(".cart-remove");
+      if (!removeButton) return;
+
+      const id = removeButton.dataset.id;
+      if (!id) return;
+
+      this.removeCartItem(id);
+    });
+  }
 }
