@@ -4,9 +4,10 @@ import ProductList from "./ProductList.mjs";
 // Product list setup
 const dataSource = new ProductData("tents");
 const element = document.querySelector(".product-list");
-const productList = new ProductList("tents", dataSource, element);
-productList.init();
+const productList = new ProductList("Tents", dataSource, element);
 
-// Alerts
-const alertData = new alert("../public/json/alert.json");
 alertData.getAlertData();
+productList.init();
+import { loadHeaderFooter } from "./utils.mjs";
+loadHeaderFooter();
+
