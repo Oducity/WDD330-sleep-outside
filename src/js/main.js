@@ -8,6 +8,6 @@ const productList = new ProductList("Tents", dataSource, element);
 const alertData = new alert("../public/json/alert.json");
 
 alertData.getAlertData();
-productList.init();
+productList();
 import { loadHeaderFooter } from "./utils.mjs";
 loadHeaderFooter();
