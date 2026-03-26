@@ -4,9 +4,7 @@ import { getDiscount } from "./getDiscount.mjs";
 function productCardTemplate(product) {
   if (product.suggestedRetailPrice) {
     const discount = new getDiscount();
-    const discountValue = discount(
-      product.SuggestedRetailPrice - product.FinalPrice,
-    );
+    const discountValue = discount(product.suggestedRetailPrice, product.FinalPrice);
     return `
     <li class="product-card">
       <a href="/product_pages/index.html?product=${product.Id}">
