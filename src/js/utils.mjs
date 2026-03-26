@@ -29,6 +29,14 @@ export function getParam(param) {
   return urlParams.get(param);
 }
 
+export function formDataToJSON(formData) {
+  const data = {};
+  for (const [key, value] of formData.entries()) {
+    data[key] = value;
+  }
+  return data;
+}
+
 // Render a list of items using a template function
 export function renderListWithTemplate(
   templateFn,
