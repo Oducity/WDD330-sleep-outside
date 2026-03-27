@@ -1,8 +1,7 @@
-
 [
-    {
-        "text": "This is only a text",
-        "background": "darkblue",
-        "color": "white"
-    }
+  {
+    "text": "This is only a text",
+    "background": "darkblue",
+    "color": "white"
+  }
 ]

@@ -11,4 +11,3 @@ alertData.getAlertData();
 const product = new ProductDetails(productID, dataSource);
 product.init();
 loadHeaderFooter();
-
