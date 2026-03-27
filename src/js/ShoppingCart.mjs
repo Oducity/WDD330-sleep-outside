@@ -91,7 +91,11 @@ export default class ShoppingCart {
     this.saveCartItems(items);
 
     this.listElement.innerHTML = "";
-    renderListWithTemplate(cartItemTemplate, this.listElement, items);
+    if (!items.length) {
+      this.listElement.innerHTML = "<li class=\"cart-empty\">There is nothing in the cart</li>";
+    } else {
+      renderListWithTemplate(cartItemTemplate, this.listElement, items);
+    }
 
     this.updateCartFooter(items);
   }

@@ -36,8 +36,7 @@ export default class ProductList {
     this.dataSource = dataSource;
     this.listElement = listElement;
     this.products = [];
-  };
-
+  }
   async init() {
     this.products = await this.dataSource.getData(this.category);
     this.renderList(this.products);
@@ -60,8 +59,7 @@ export default class ProductList {
         break;
       default:
         break;
-    };
-
+    }
     this.renderList(sorted);
   };
   renderList(list) {
