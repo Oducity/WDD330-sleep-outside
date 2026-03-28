@@ -328,3 +328,28 @@ footer {
   text-decoration: none;
   color: var(--dark-grey);
 }
+
+/* Fix quantity buttons */
+.cart-card__quantity {
+  display: flex;
+  align-items: center;
+  gap: 0.3rem;
+}
+
+.cart-card__quantity button {
+  padding: 0.2em 0.6em;
+  font-size: 0.9em;
+  background-color: var(--primary-color);
+  color: white;
+  border-radius: 4px;
+  line-height: 1;
+}
+
+.cart-card__quantity span {
+  min-width: 20px;
+  text-align: center;
+}
+
+.cart-remove {
+  z-index: 10;
+}
