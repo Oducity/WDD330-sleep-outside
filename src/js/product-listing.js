@@ -1,27 +1,28 @@
 import { loadHeaderFooter, getParam } from "./utils.mjs";
-import ProductData from "./ProductData.mjs";
+import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
 
 loadHeaderFooter();
 
-// obtener categoría desde URL
+// get category from URL
 const category = getParam("category") || "tents";
 
-// actualizar título
+// update page title
 const titleElement = document.querySelector(".title");
-if (titleElement) {
+
+if (titleElement && category) {
   const formattedCategory = category.replace("-", " ");
   titleElement.textContent = `Top Products: ${formattedCategory}`;
 }
 
-// data source correcto (tu backend)
-const dataSource = new ProductData();
+// create data source
+const dataSource = new ExternalServices();
 
-// elemento donde renderiza
+// select element
 const element = document.querySelector(".product-list");
 
-// crear lista
-const productList = new ProductList(category, dataSource, element);
-
-// inicializar
-productList.init();
+// create product list
+if (element) {
+  const productList = new ProductList(category, dataSource, element);
+  productList.init();
+}
