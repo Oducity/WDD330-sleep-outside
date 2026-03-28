@@ -64,8 +64,6 @@ export default class ProductList {
       case "price-desc":
         sorted.sort((a, b) => Number(b.FinalPrice) - Number(a.FinalPrice));
         break;
-      default:
-        break;
     }
 
     this.renderList(sorted);
