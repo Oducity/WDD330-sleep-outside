@@ -1,4 +1,4 @@
-import { loadHeaderFooter } from "./utils.mjs";
+import { loadHeaderFooter, alertMessage } from "./utils.mjs";
 import CheckoutProcess from "./CheckoutProcess.mjs";
 
 loadHeaderFooter();
@@ -19,6 +19,7 @@ if (checkoutForm) {
 	checkoutForm.addEventListener("submit", async (event) => {
 		event.preventDefault();
 
+		// ✅ HTML Validation
 		if (!checkoutForm.checkValidity()) {
 			checkoutForm.reportValidity();
 			return;
@@ -26,14 +27,18 @@ if (checkoutForm) {
 
 		checkout.calculateOrderTotal();
 
-		try {
-			const result = await checkout.checkout(checkoutForm);
-			localStorage.removeItem("so-cart");
-			window.alert(result.message || "Order submitted successfully.");
-			window.location.href = "/index.html";
-		} catch (error) {
-			window.alert(`Checkout failed: ${error.message}`);
+		const result = await checkout.checkout(checkoutForm);
+
+		// 🚨 Show an alert if it fails
+		if (!result) {
+			alertMessage(
+				"There was an error processing your order. Please check your information and try again."
+			);
+			return;
 		}
+
+		// 🎉 Success
+		localStorage.removeItem("so-cart");
+		window.location.href = "/checkout/success.html";
 	});
 }
-
