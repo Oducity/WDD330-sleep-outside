@@ -22,8 +22,8 @@ export default defineConfig({
     viteStaticCopy({
       targets: [
         {
-          src: "src/checkout/success.html", // archivo que queremos copiar
-          dest: "checkout",                 // carpeta de destino dentro de dist/
+          src: "checkout/success.html", // ✅ ruta relativa a root
+          dest: "checkout",
         },
       ],
     }),
