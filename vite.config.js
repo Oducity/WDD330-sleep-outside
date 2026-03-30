@@ -23,7 +23,7 @@ export default defineConfig({
       targets: [
         {
           src: "checkout/success.html", // ✅ ruta relativa a root
-          dest: "checkout",
+          dest: ".", // ✅ se copia a dist/checkout/success.html
         },
       ],
     }),
