@@ -1,5 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
+import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   root: "src/",
@@ -16,4 +17,15 @@ export default defineConfig({
       },
     },
   },
+
+  plugins: [
+    viteStaticCopy({
+      targets: [
+        {
+          src: "src/checkout/success.html", // archivo que queremos copiar
+          dest: "checkout",                 // carpeta de destino dentro de dist/
+        },
+      ],
+    }),
+  ],
 });
