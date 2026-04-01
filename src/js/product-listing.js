@@ -1,6 +1,6 @@
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
-import ProductList from "./ProductList.mjs";
+import { ProductList, displayDialog } from "./ProductList.mjs";
 
 loadHeaderFooter();
 
@@ -15,14 +15,5 @@ if (titleElement && category) {
   titleElement.textContent = `Top Products: ${formattedCategory}`;
 }
 
-// create data source
-const dataSource = new ExternalServices();
-
-// select element
-const element = document.querySelector(".product-list");
-
-// create product list
-if (element) {
-  const productList = new ProductList(category, dataSource, element);
-  productList.init();
-}
+const productCards = document.querySelectorAll(".product-card");
+displayDialog(productCards);

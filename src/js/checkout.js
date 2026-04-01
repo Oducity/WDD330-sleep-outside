@@ -9,36 +9,30 @@ checkout.calculateOrderTotal();
 
 const zipInput = document.querySelector("#zip");
 if (zipInput) {
-	zipInput.addEventListener("change", () => {
-		checkout.calculateOrderTotal();
-	});
+  zipInput.addEventListener("change", () => {
+    checkout.calculateOrderTotal();
+  });
 }
 
 const checkoutForm = document.querySelector("#checkout-form");
 if (checkoutForm) {
-	checkoutForm.addEventListener("submit", async (event) => {
-		event.preventDefault();
+  checkoutForm.addEventListener("submit", async (event) => {
+    event.preventDefault();
 
-		// ✅ HTML Validation
-		if (!checkoutForm.checkValidity()) {
-			checkoutForm.reportValidity();
-			return;
-		}
+    if (!checkoutForm.checkValidity()) {
+      checkoutForm.reportValidity();
+      return;
+    }
 
-		checkout.calculateOrderTotal();
+    checkout.calculateOrderTotal();
 
-		const result = await checkout.checkout(checkoutForm);
-
-		// 🚨 Show an alert if it fails
-		if (!result) {
-			alertMessage(
-				"There was an error processing your order. Please check your information and try again."
-			);
-			return;
-		}
-
-		// 🎉 Success
-		localStorage.removeItem("so-cart");
-		window.location.href = "/checkout/success.html";
-	});
+    try {
+      const result = await checkout.checkout(checkoutForm);
+      localStorage.removeItem("so-cart");
+      window.alert(result.message || "Order submitted successfully.");
+      window.location.href = "/index.html";
+    } catch (error) {
+      window.alert(`Checkout failed: ${error.message}`);
+    }
+  });
 }
