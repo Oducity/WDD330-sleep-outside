@@ -23,7 +23,13 @@ function cartItemTemplate(item) {
       <h2 class="card__name">${item.Name}</h2>
     </a>
     <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
-    <p class="cart-card__quantity">qty: ${quantity}</p>
+
+    <p class="cart-card__quantity">
+      <button class="qty-minus" data-id="${item.Id}">-</button>
+      <span>${quantity}</span>
+      <button class="qty-plus" data-id="${item.Id}">+</button>
+    </p>
+
     <p class="cart-card__price">$${lineTotal.toFixed(2)}</p>
   </li>`;
 }
@@ -66,8 +72,10 @@ export default class ShoppingCart {
 
   calculateTotal(items) {
     return items.reduce(
-      (sum, item) => sum + (Number(item.quantity) || 1) * Number(item.FinalPrice || 0),
-      0,
+      (sum, item) =>
+        sum +
+        (Number(item.quantity) || 1) * Number(item.FinalPrice || 0),
+      0
     );
   }
 
@@ -83,7 +91,9 @@ export default class ShoppingCart {
     }
 
     footer.classList.remove("hide");
-    totalElement.textContent = `Total: $${this.calculateTotal(items).toFixed(2)}`;
+    totalElement.textContent = `Total: $${this.calculateTotal(items).toFixed(
+      2
+    )}`;
   }
 
   renderCartContents() {
@@ -91,13 +101,42 @@ export default class ShoppingCart {
     this.saveCartItems(items);
 
     this.listElement.innerHTML = "";
+
     if (!items.length) {
-      this.listElement.innerHTML = "<li class=\"cart-empty\">There is nothing in the cart</li>";
+      this.listElement.innerHTML =
+        '<li class="cart-empty">There is nothing in the cart</li>';
     } else {
       renderListWithTemplate(cartItemTemplate, this.listElement, items);
     }
 
     this.updateCartFooter(items);
+  }
+
+  // ➕ AUMENTAR
+  increaseQuantity(id) {
+    const items = this.getCartItems();
+    const item = items.find((i) => i.Id === id);
+    if (item) {
+      item.quantity = (item.quantity || 1) + 1;
+      this.saveCartItems(items);
+      this.renderCartContents();
+    }
+  }
+
+  // ➖ DISMINUIR
+  decreaseQuantity(id) {
+    const items = this.getCartItems();
+    const item = items.find((i) => i.Id === id);
+    if (item) {
+      if (item.quantity > 1) {
+        item.quantity -= 1;
+      } else {
+        this.removeCartItem(id);
+        return;
+      }
+      this.saveCartItems(items);
+      this.renderCartContents();
+    }
   }
 
   removeCartItem(id) {
@@ -117,13 +156,31 @@ export default class ShoppingCart {
 
   addEventListeners() {
     this.listElement.addEventListener("click", (event) => {
+
+      // ❌ eliminar
       const removeButton = event.target.closest(".cart-remove");
-      if (!removeButton) return;
+      if (removeButton) {
+        const id = removeButton.dataset.id;
+        if (id) this.removeCartItem(id);
+        return;
+      }
 
-      const id = removeButton.dataset.id;
-      if (!id) return;
+      // ➕ aumentar
+      const plusButton = event.target.closest(".qty-plus");
+      if (plusButton) {
+        const id = plusButton.dataset.id;
+        if (id) this.increaseQuantity(id);
+        return;
+      }
 
-      this.removeCartItem(id);
+      // ➖ disminuir
+      const minusButton = event.target.closest(".qty-minus");
+      if (minusButton) {
+        const id = minusButton.dataset.id;
+        if (id) this.decreaseQuantity(id);
+        return;
+      }
+
     });
   }
 }

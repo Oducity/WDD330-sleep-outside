@@ -83,3 +83,34 @@ export async function loadHeaderFooter() {
     renderWithTemplate(footerTemplate, footerElement);
   }
 }
+
+// 🚨 CUSTOM ALERT MESSAGE (NEW)
+export function alertMessage(message, scroll = true) {
+  // create container
+  const alert = document.createElement("div");
+  alert.classList.add("alert");
+
+  // message content
+  alert.innerHTML = `
+    <p>${message}</p>
+    <span class="close-btn" style="cursor:pointer;">❌</span>
+  `;
+
+  // The event will close only if you click the X
+  alert.addEventListener("click", function (e) {
+    if (e.target.classList.contains("close-btn")) {
+      alert.remove();
+    }
+  });
+
+  // insert above the main section
+  const main = document.querySelector("main");
+  if (main) {
+    main.prepend(alert);
+  }
+
+  // Scroll up if necessary
+  if (scroll) {
+    window.scrollTo(0, 0);
+  }
+}

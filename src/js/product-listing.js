@@ -4,18 +4,15 @@ import { ProductList, displayDialog } from "./ProductList.mjs";
 
 loadHeaderFooter();
 
+// get category from URL
 const category = getParam("category") || "tents";
-const dataSource = new ExternalServices();
-const element = document.querySelector(".product-list");
-const listing = new ProductList(category, dataSource, element);
 
-await listing.init();
+// update page title
+const titleElement = document.querySelector(".title");
 
-const sortSelect = document.querySelector("#sortProducts");
-if (sortSelect) {
-  sortSelect.addEventListener("change", (event) => {
-    listing.sortBy(event.target.value);
-  });
+if (titleElement && category) {
+  const formattedCategory = category.replace("-", " ");
+  titleElement.textContent = `Top Products: ${formattedCategory}`;
 }
 
 const productCards = document.querySelectorAll(".product-card");
