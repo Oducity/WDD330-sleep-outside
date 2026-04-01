@@ -324,3 +324,7 @@ footer {
   text-decoration: none;
   color: var(--dark-grey);
 }
+
+.show {
+  display: block;
+}
