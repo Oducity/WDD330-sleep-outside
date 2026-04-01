@@ -1,6 +1,6 @@
 import { loadHeaderFooter, getParam } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
-import ProductList from "./ProductList.mjs";
+import { ProductList, displayDialog } from "./ProductList.mjs";
 
 loadHeaderFooter();
 
@@ -17,3 +17,6 @@ if (sortSelect) {
     listing.sortBy(event.target.value);
   });
 }
+
+const productCards = document.querySelectorAll(".product-card");
+displayDialog(productCards);
