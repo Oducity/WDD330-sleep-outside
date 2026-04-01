@@ -107,9 +107,11 @@ export function displayDialog(productCards) {
   productCards.forEach((productCard) => {
     productCard
       .children("#open-dialog")
-      .target.addEventListener("click", (e) => {
-        //this.document.querySelector("#dialog-details").classList.toggle("show");
-        e.classList.toggle("show");
+      .target.addEventListener("click", () => {
+        this.document.querySelector("#dialog-details").classList.toggle("show");
       });
+    productCard.children("#close-dialog").target.addEventListener("click", () => {
+      this.document.querySelector("#dialog-details").classList.toggle("show");
+    } )
   });
 }
