@@ -1,4 +1,4 @@
-import { loadHeaderFooter, getParam } from "./utils.mjs";
+import { loadHeaderFooter, getParam, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 import { ProductList, displayDialog } from "./ProductList.mjs";
 
@@ -7,8 +7,11 @@ loadHeaderFooter();
 // get category from URL
 const category = getParam("category") || "tents";
 
-// update page title
-const titleElement = document.querySelector(".title");
+try {
+  await listing.init();
+} catch (err) {
+  alertMessage("Unable to load products right now. Please try again in a moment.");
+}
 
 if (titleElement && category) {
   const formattedCategory = category.replace("-", " ");

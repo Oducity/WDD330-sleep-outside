@@ -2,22 +2,15 @@ import { renderListWithTemplate } from "./utils.mjs";
 import { getDiscount } from "./getDiscount.mjs";
 
 function productCardTemplate(product) {
-  if (product.suggestedRetailPrice) {
-    const discount = new getDiscount();
-    const discountValue = discount(
-      product.suggestedRetailPrice,
-      product.FinalPrice
-    );
-
+  if (Number(product.SuggestedRetailPrice || 0) > Number(product.FinalPrice || 0)) {
+    const discountValue = getDiscount(product.SuggestedRetailPrice, product.FinalPrice);
     return `
     <li class="product-card">
       <a href="/product_pages/index.html?product=${product.Id}">
         <img src="${product.Images?.PrimaryMedium || product.Image}" alt="${product.Name}">
           <h2>${product.Brand.Name}</h2>
           <h3>${product.NameWithoutBrand}</h3>
-          <p class="product-card__price">
-            $${product.FinalPrice} || <span>Discounted: ${discountValue}</span>
-          </p>
+          <p class="product-card__price">$${product.FinalPrice} <span>(Save $${discountValue.toFixed(2)})</span></p>
       </a>
       <button id="open-dialog" class="open-dialog">View Details</button>
       <dialog id="dialog-details">

@@ -1,5 +1,5 @@
 import ExternalServices from "./ExternalServices.mjs";
-import { formDataToJSON, getLocalStorage } from "./utils.mjs";
+import { formDataToJSON, getLocalStorage, alertMessage} from "./utils.mjs";
 
 const CART_KEY = "so-cart";
 
@@ -80,13 +80,17 @@ export default class CheckoutProcess {
 
       console.log("Orden exitosa:", result);
 
-      return result;
-
+    try {
+      await this.externalServices.checkout(orderData);
+      localStorage.removeItem(this.cartKey);
+      window.location.href = "/checkout/success.html";
     } catch (err) {
-      console.error("Error en checkout:", err);
-
-      // Aquí luego mostraremos el error al usuario (PASO 6)
-      return null;
+      const msg =
+        err.message?.message ||
+        err.message?.error ||
+        JSON.stringify(err.message) ||
+        "Order failed. Please try again.";
+      alertMessage(msg);
     }
   }
 }

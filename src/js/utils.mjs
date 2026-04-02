@@ -67,6 +67,27 @@ export async function loadTemplate(path) {
   return template;
 }
 
+export function alertMessage(message, scroll = true) {
+  const main = document.querySelector("main");
+  if (!main) return;
+
+  const existing = main.querySelector(".alert-message");
+  if (existing) existing.remove();
+
+  const alert = document.createElement("div");
+  alert.classList.add("alert-message");
+
+  const text = typeof message === "object" ? JSON.stringify(message) : message;
+  alert.innerHTML = `<p>${text}</p><button class="alert-close" aria-label="Close">&#10005;</button>`;
+  alert.querySelector(".alert-close").addEventListener("click", () => alert.remove());
+
+  main.prepend(alert);
+
+  if (scroll) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 // Load and render header and footer templates
 export async function loadHeaderFooter() {
   // Load header
@@ -81,36 +102,5 @@ export async function loadHeaderFooter() {
   const footerElement = document.querySelector("#main-footer");
   if (footerElement) {
     renderWithTemplate(footerTemplate, footerElement);
-  }
-}
-
-// 🚨 CUSTOM ALERT MESSAGE (NEW)
-export function alertMessage(message, scroll = true) {
-  // create container
-  const alert = document.createElement("div");
-  alert.classList.add("alert");
-
-  // message content
-  alert.innerHTML = `
-    <p>${message}</p>
-    <span class="close-btn" style="cursor:pointer;">❌</span>
-  `;
-
-  // The event will close only if you click the X
-  alert.addEventListener("click", function (e) {
-    if (e.target.classList.contains("close-btn")) {
-      alert.remove();
-    }
-  });
-
-  // insert above the main section
-  const main = document.querySelector("main");
-  if (main) {
-    main.prepend(alert);
-  }
-
-  // Scroll up if necessary
-  if (scroll) {
-    window.scrollTo(0, 0);
   }
 }

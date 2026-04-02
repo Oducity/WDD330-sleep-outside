@@ -122,16 +122,34 @@ button:hover {
 /* End utility classes */
 
 /* Cart icon styles */
-.cart {
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
   padding-top: 1em;
+}
+
+.wishlist,
+.cart {
+  padding-top: 0;
   position: relative;
   text-align: center;
 }
 
-.cart svg {
-  width: 25px;
+.wishlist a,
+.cart a {
+  display: flex;
+  align-items: center;
+  color: var(--dark-grey);
 }
 
+.wishlist svg,
+.cart svg {
+  width: 25px;
+  height: 25px;
+}
+
+.wishlist:hover svg,
 .cart:hover svg {
   fill: gray;
 }
@@ -329,6 +347,35 @@ footer {
   color: var(--dark-grey);
 }
 
-.show {
-  display: block;
+.alert-message {
+  background-color: var(--tertiary-color);
+  color: white;
+  padding: 1rem;
+  margin: 1rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-radius: 4px;
+}
+
+.alert-message p {
+  margin: 0;
+  padding: 0;
+}
+
+.alert-close {
+  background: none;
+  border: none;
+  color: white;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0;
+  margin: 0;
+}
+
+.wishlist-to-cart {
+  grid-column: 1 / -1;
+  margin-top: 0.5rem;
+  font-size: var(--small-font);
+  padding: 0.3em 1em;
 }
