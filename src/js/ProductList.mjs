@@ -12,6 +12,21 @@ function productCardTemplate(product) {
           <h3>${product.NameWithoutBrand}</h3>
           <p class="product-card__price">$${product.FinalPrice} <span>(Save $${discountValue.toFixed(2)})</span></p>
       </a>
+      <button id="open-dialog" class="open-dialog">View Details</button>
+      <dialog id="dialog-details">
+        <div id="modal-box" class=modal-box>
+          <h1 class="modal-head" id="modal-head">Details</h1>
+          <section id="modal-head" class="modal-section">
+            <h2>${product.Brand.Name}</h2>
+            <h3>${product.NameWithoutBrand}</h3>
+            <p>Initial Price: $${product.suggestedRetailPrice}</p>
+            <p>Final Price: $${product.FinalPrice}</p>
+            <p>Discounted: $${discountValue}</p>
+            <p>Description: ${product.DescriptionHtmlSimple}</p>
+          </section>
+        </div>
+        <button id="close-dialog" class="close-dialog" type="button"></button>
+      </dialog>
     </li>
     `;
   } else {
@@ -23,11 +38,23 @@ function productCardTemplate(product) {
           <h3>${product.NameWithoutBrand}</h3>
           <p class="product-card__price">$${product.FinalPrice}</p>
       </a>
+      <button class="open-dialog">View Details</button>
+      <dialog id="dialog-details">
+        <div id="modal-box" class=modal-box>
+          <h1 class="modal-head" id="modal-head">Details</h1>
+          <section id="modal-head" class="modal-section">
+            <h2>${product.Brand.Name}</h2>
+            <h3>${product.NameWithoutBrand}</h3>
+            <p>Final Price: $${product.FinalPrice}</p>
+            <p>Description: ${product.DescriptionHtmlSimple}</p>
+          </section>
+        </div>
+        <button id="close-dialog" class="close-dialog" type="button"></button>
+      </dialog>
     </li>
     `;
   }
-};
-
+}
 
 export default class ProductList {
   constructor(category, dataSource, listElement) {
@@ -36,10 +63,11 @@ export default class ProductList {
     this.listElement = listElement;
     this.products = [];
   }
+
   async init() {
     this.products = await this.dataSource.getData(this.category);
     this.renderList(this.products);
-  };
+  }
   sortBy(sortValue) {
     const sorted = [...this.products];
 
@@ -56,18 +84,30 @@ export default class ProductList {
       case "price-desc":
         sorted.sort((a, b) => Number(b.FinalPrice) - Number(a.FinalPrice));
         break;
-      default:
-        break;
     }
+
     this.renderList(sorted);
-  };
+  }
   renderList(list) {
     renderListWithTemplate(
       productCardTemplate,
       this.listElement,
       list,
       "afterbegin",
-      true
+      true,
     );
-  };
-};
+  }
+}
+
+export function displayDialog(productCards) {
+  productCards.forEach((productCard) => {
+    productCard
+      .children("#open-dialog")
+      .target.addEventListener("click", () => {
+        this.document.querySelector("#dialog-details").classList.toggle("show");
+      });
+    productCard.children("#close-dialog").target.addEventListener("click", () => {
+      this.document.querySelector("#dialog-details").classList.toggle("show");
+    } )
+  });
+}

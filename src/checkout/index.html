@@ -18,42 +18,58 @@
           <p>Discount: <span id="discount">$0.00</span></p>
           <p>Shipping: <span id="shipping">$0.00</span></p>
           <p>Tax (6%): <span id="tax">$0.00</span></p>
-          <p><strong>Order Total: <span id="order-total">$0.00</span></strong></p>
+          <p>
+            <strong>Order Total: <span id="order-total">$0.00</span></strong>
+          </p>
         </section>
         <form name="checkout-form" id="checkout-form">
           <fieldset>
             <legend>Customer Name</legend>
-            <label>First Name
+            <label
+              >First Name
               <input type="text" name="fname" required />
             </label>
-            <label>Last Name
+            <label
+              >Last Name
               <input type="text" name="lname" required />
             </label>
           </fieldset>
           <fieldset>
             <legend>Address</legend>
-            <label>Street Address
+            <label
+              >Street Address
               <input type="text" name="street" required />
             </label>
-            <label>City
+            <label
+              >City
               <input type="text" name="city" required />
             </label>
-            <label>State
+            <label
+              >State
               <input type="text" name="state" required />
             </label>
-            <label>Zip Code
+            <label
+              >Zip Code
               <input type="text" name="zip" id="zip" required />
             </label>
           </fieldset>
           <fieldset>
             <legend>Payment</legend>
-            <label>Credit Card Number
+            <label
+              >Credit Card Number
               <input type="text" name="cardNumber" maxlength="16" required />
             </label>
-            <label>Expiration Date
-              <input type="text" name="expiration" placeholder="MM/YY" required />
+            <label
+              >Expiration Date
+              <input
+                type="text"
+                name="expiration"
+                placeholder="MM/YY"
+                required
+              />
             </label>
-            <label>Security Code
+            <label
+              >Security Code
               <input type="text" name="code" maxlength="4" required />
             </label>
           </fieldset>

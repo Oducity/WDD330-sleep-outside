@@ -11,6 +11,7 @@ function packageItems(items) {
     quantity: Number(item.quantity) || 1,
   }));
 }
+
 export default class CheckoutProcess {
   constructor(cartKey = CART_KEY, externalServices = new ExternalServices()) {
     this.cartKey = cartKey;
@@ -29,7 +30,6 @@ export default class CheckoutProcess {
   calculateOrderSubtotal() {
     const items = this.getCartItems();
 
-    // FinalPrice is already the discounted price; SuggestedRetailPrice is what it would normally cost
     this.subtotal = items.reduce(
       (sum, item) => sum + (Number(item.quantity) || 1) * Number(item.FinalPrice || 0),
       0,
@@ -66,14 +66,19 @@ export default class CheckoutProcess {
   }
 
   async checkout(form) {
-    const formData = new FormData(form);
-    const orderData = formDataToJSON(formData);
+    try {
+      const formData = new FormData(form);
+      const orderData = formDataToJSON(formData);
 
-    orderData.orderDate = new Date().toISOString();
-    orderData.items = packageItems(this.getCartItems());
-    orderData.tax = this.tax.toFixed(2);
-    orderData.shipping = this.shipping;
-    orderData.orderTotal = this.orderTotal.toFixed(2);
+      orderData.orderDate = new Date().toISOString();
+      orderData.items = packageItems(this.getCartItems());
+      orderData.tax = this.tax.toFixed(2);
+      orderData.shipping = this.shipping;
+      orderData.orderTotal = this.orderTotal.toFixed(2);
+
+      const result = await this.externalServices.checkout(orderData);
+
+      console.log("Orden exitosa:", result);
 
     try {
       await this.externalServices.checkout(orderData);

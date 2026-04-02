@@ -321,18 +321,22 @@ footer {
   padding: 1em;
 }
 
+/* Categories layout */
 .category-list {
   list-style: none;
-  display: flex;
-  flex-wrap: wrap;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
   gap: 1rem;
-  justify-content: center;
   padding: 0.5rem;
 }
 
+.category-list li {
+  text-align: center;
+}
+
 .category-list img {
-  width: 200px;
-  height: 200px;
+  width: 120px;
+  height: auto;
 }
 
 .category-list a {
