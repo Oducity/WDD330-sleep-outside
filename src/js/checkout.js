@@ -25,15 +25,7 @@ if (checkoutForm) {
 		}
 
 		checkout.calculateOrderTotal();
-
-		try {
-			const result = await checkout.checkout(checkoutForm);
-			localStorage.removeItem("so-cart");
-			window.alert(result.message || "Order submitted successfully.");
-			window.location.href = "/index.html";
-		} catch (error) {
-			window.alert(`Checkout failed: ${error.message}`);
-		}
+    await checkout.checkout(checkoutForm);
 	});
 }
 

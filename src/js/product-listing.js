@@ -1,4 +1,4 @@
-import { loadHeaderFooter, getParam } from "./utils.mjs";
+import { loadHeaderFooter, getParam, alertMessage } from "./utils.mjs";
 import ExternalServices from "./ExternalServices.mjs";
 import ProductList from "./ProductList.mjs";
 
@@ -9,7 +9,11 @@ const dataSource = new ExternalServices();
 const element = document.querySelector(".product-list");
 const listing = new ProductList(category, dataSource, element);
 
-await listing.init();
+try {
+  await listing.init();
+} catch (err) {
+  alertMessage("Unable to load products right now. Please try again in a moment.");
+}
 
 const sortSelect = document.querySelector("#sortProducts");
 if (sortSelect) {

@@ -67,6 +67,27 @@ export async function loadTemplate(path) {
   return template;
 }
 
+export function alertMessage(message, scroll = true) {
+  const main = document.querySelector("main");
+  if (!main) return;
+
+  const existing = main.querySelector(".alert-message");
+  if (existing) existing.remove();
+
+  const alert = document.createElement("div");
+  alert.classList.add("alert-message");
+
+  const text = typeof message === "object" ? JSON.stringify(message) : message;
+  alert.innerHTML = `<p>${text}</p><button class="alert-close" aria-label="Close">&#10005;</button>`;
+  alert.querySelector(".alert-close").addEventListener("click", () => alert.remove());
+
+  main.prepend(alert);
+
+  if (scroll) {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }
+}
+
 // Load and render header and footer templates
 export async function loadHeaderFooter() {
   // Load header

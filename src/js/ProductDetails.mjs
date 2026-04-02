@@ -1,6 +1,7 @@
-import { getLocalStorage, setLocalStorage } from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, alertMessage} from "./utils.mjs";
 
 const CART_KEY = "so-cart";
+const WISHLIST_KEY = "so-wishlist";
 
 export default class ProductDetails {
   constructor(productId, dataSource) {
@@ -14,6 +15,7 @@ export default class ProductDetails {
     if (!this.product) throw new Error("Product not found");
     this.renderProductDetails();
     document.getElementById("addToCart").addEventListener("click", this.addProductToCart.bind(this));
+    document.getElementById("addToWishlist").addEventListener("click", this.addToWishlist.bind(this));
   }
 
   addProductToCart() {
@@ -34,6 +36,21 @@ export default class ProductDetails {
     setLocalStorage(CART_KEY, cartItems);
   }
 
+  addToWishlist() {
+    const wishlist = getLocalStorage(WISHLIST_KEY) || [];
+    const already = wishlist.find((item) => item.Id === this.product.Id);
+    if (already) {
+      alertMessage(`${this.product.Name} is already in your wishlist.`);
+      return;
+    }
+    wishlist.push({
+      ...this.product,
+      Image: this.product.Images?.PrimaryMedium || this.product.Image,
+    });
+    setLocalStorage(WISHLIST_KEY, wishlist);
+    alertMessage(`${this.product.Name} added to your wishlist! ♥`);
+  }
+  
   renderProductDetails() {
     productDetailsTemplate(this.product);
   }

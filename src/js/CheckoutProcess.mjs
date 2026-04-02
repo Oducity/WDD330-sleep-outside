@@ -1,5 +1,5 @@
 import ExternalServices from "./ExternalServices.mjs";
-import { formDataToJSON, getLocalStorage } from "./utils.mjs";
+import { formDataToJSON, getLocalStorage, alertMessage} from "./utils.mjs";
 
 const CART_KEY = "so-cart";
 
@@ -75,6 +75,17 @@ export default class CheckoutProcess {
     orderData.shipping = this.shipping;
     orderData.orderTotal = this.orderTotal.toFixed(2);
 
-    return this.externalServices.checkout(orderData);
+    try {
+      await this.externalServices.checkout(orderData);
+      localStorage.removeItem(this.cartKey);
+      window.location.href = "/checkout/success.html";
+    } catch (err) {
+      const msg =
+        err.message?.message ||
+        err.message?.error ||
+        JSON.stringify(err.message) ||
+        "Order failed. Please try again.";
+      alertMessage(msg);
+    }
   }
 }
