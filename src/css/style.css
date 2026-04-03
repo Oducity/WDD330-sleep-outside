@@ -90,7 +90,7 @@ p {
   margin-top: -1.3em;
 }
 
-.logo--square > div {
+.logo--square>div {
   margin-top: -1.7em;
 }
 
@@ -112,7 +112,8 @@ button {
 }
 
 button:hover {
-  background-color: #0056b3; /* Darker shade for hover */
+  background-color: #0056b3;
+  /* Darker shade for hover */
 }
 
 .divider {
@@ -152,6 +153,32 @@ button:hover {
 .wishlist:hover svg,
 .cart:hover svg {
   fill: gray;
+}
+
+@keyframes cart-bounce {
+  0% {
+    transform: scale(1);
+  }
+
+  20% {
+    transform: scale(1.25);
+  }
+
+  40% {
+    transform: scale(0.95);
+  }
+
+  60% {
+    transform: scale(1.1);
+  }
+
+  100% {
+    transform: scale(1);
+  }
+}
+
+#cart-icon.cart-animate svg {
+  animation: cart-bounce 0.45s ease-in-out;
 }
 
 /* End cart icon styles */
