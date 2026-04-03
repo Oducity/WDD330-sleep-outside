@@ -1,6 +1,6 @@
 import { resolve } from "path";
 import { defineConfig } from "vite";
-import { viteStaticCopy } from "vite-plugin-static-copy";
+// import { viteStaticCopy } from "vite-plugin-static-copy";
 
 export default defineConfig({
   root: "src/",
@@ -20,14 +20,18 @@ export default defineConfig({
     },
   },
 
-  plugins: [
-    viteStaticCopy({
-      targets: [
-        {
-          src: "checkout/success.html", // ✅ ruta relativa a root
-          dest: ".", // ✅ se copia a dist/checkout/success.html
-        },
-      ],
-    }),
-  ],
+
+  //this is causing a break in the build process, if using this please make sure that if you are using this part of the code, that it does not interfere with the build process, and works with the rest of the code
+  // also before submitting to the main branch, please make sure that if you are using a section of code, that it works with everything else before merging, 
+  
+  // plugins: [
+  //   viteStaticCopy({
+  //     targets: [
+  //       {
+  //         src: "checkout/success.html", // ✅ ruta relativa a root
+  //         dest: ".", // ✅ se copia a dist/checkout/success.html
+  //       },
+  //     ],
+  //   }),
+  // ],
 });
