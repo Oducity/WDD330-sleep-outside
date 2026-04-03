@@ -1,6 +1,3 @@
-const headerUrl = "../json/header.json";
-
-
 
 export default function displaybodychildren(url) {
     const body = document.querySelector("#body");

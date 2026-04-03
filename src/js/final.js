@@ -1,4 +1,4 @@
-const headerUrl = "../final-public/json/header.json";
+const headerUrl = "../public/json/header.json";
 
 import displaybodychildren from "./header-footer.mjs";
 
