@@ -1,4 +1,4 @@
-import { getLocalStorage, setLocalStorage, alertMessage} from "./utils.mjs";
+import { getLocalStorage, setLocalStorage, alertMessage, animateCartIcon } from "./utils.mjs";
 
 const CART_KEY = "so-cart";
 const WISHLIST_KEY = "so-wishlist";
@@ -34,6 +34,7 @@ export default class ProductDetails {
     }
 
     setLocalStorage(CART_KEY, cartItems);
+    animateCartIcon();
   }
 
   addToWishlist() {
@@ -50,7 +51,7 @@ export default class ProductDetails {
     setLocalStorage(WISHLIST_KEY, wishlist);
     alertMessage(`${this.product.Name} added to your wishlist! ♥`);
   }
-  
+
   renderProductDetails() {
     productDetailsTemplate(this.product);
   }

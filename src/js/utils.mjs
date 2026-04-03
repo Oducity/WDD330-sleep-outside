@@ -67,6 +67,14 @@ export async function loadTemplate(path) {
   return template;
 }
 
+export function animateCartIcon() {
+  const cartIcon = document.getElementById("cart-icon");
+  if (!cartIcon) return;
+
+  cartIcon.classList.add("cart-animate");
+  window.setTimeout(() => cartIcon.classList.remove("cart-animate"), 450);
+}
+
 export function alertMessage(message, scroll = true) {
   const main = document.querySelector("main");
   if (!main) return;
