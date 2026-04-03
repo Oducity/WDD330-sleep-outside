@@ -14,7 +14,7 @@ export default class alert{
             }
             const messages = await response.json();
             const section = document.createElement("section");
-            section.classList.add = "alert-list";
+            section.classList.add("alert-list");
             messages.forEach((message) => {
                 const textP = document.createElement("p");
                 textP.innerText = message.text;
@@ -25,7 +25,7 @@ export default class alert{
             main.prepend(section);
         } catch (error) {
             const p = document.createElement("p");
-            p.classList.add = "error-message";
+            p.classList.add("error-message");
             p.innerText = `Error displaying alert message! Error: ${error.message}`;
             if (!main) {
                 console.error("<main> element not found");
