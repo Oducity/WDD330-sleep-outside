@@ -1,5 +1,5 @@
 import ExternalServices from "./ExternalServices.mjs";
-import { formDataToJSON, getLocalStorage, alertMessage} from "./utils.mjs";
+import { formDataToJSON, getLocalStorage, alertMessage } from "./utils.mjs";
 
 const CART_KEY = "so-cart";
 
@@ -76,11 +76,6 @@ export default class CheckoutProcess {
       orderData.shipping = this.shipping;
       orderData.orderTotal = this.orderTotal.toFixed(2);
 
-      const result = await this.externalServices.checkout(orderData);
-
-      console.log("Orden exitosa:", result);
-
-    try {
       await this.externalServices.checkout(orderData);
       localStorage.removeItem(this.cartKey);
       window.location.href = "/checkout/success.html";
