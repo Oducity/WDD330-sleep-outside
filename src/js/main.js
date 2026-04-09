@@ -5,7 +5,7 @@ import ProductList from "./ProductList.mjs";
 
 loadHeaderFooter();
 
-const alertData = new Alert("../public/json/alert.json");
+const alertData = new Alert("/json/alert.json");
 alertData.getAlertData();
 
 // setup product list (home page)
