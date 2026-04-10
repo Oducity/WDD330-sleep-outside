@@ -3,11 +3,16 @@ import ExternalServices from "./ExternalServices.mjs";
 import ProductDetails from "./ProductDetails.mjs";
 import alert from "./alert.mjs";
 
-const alertData = new alert("/json/alert.json");
 const dataSource = new ExternalServices();
 const productID = getParam("product");
 
-alertData.getAlertData();
+// Load product details and header/footer in parallel
 const product = new ProductDetails(productID, dataSource);
-product.init();
-loadHeaderFooter();
+Promise.all([
+  product.init(),
+  loadHeaderFooter()
+]);
+
+// Load alerts in background (not blocking product render)
+const alertData = new alert("/json/alert.json");
+alertData.getAlertData();
