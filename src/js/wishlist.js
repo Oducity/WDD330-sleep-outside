@@ -39,11 +39,14 @@ function moveToCart(id) {
 
   // Add to cart
   const cart = getLocalStorage(CART_KEY) || [];
-  const existing = cart.find((i) => i.Id === id);
+  const selectedColor = item.selectedColor || item.Colors?.[0]?.ColorName || null;
+  const existing = cart.find(
+    (i) => i.Id === id && (i.selectedColor || i.Colors?.[0]?.ColorName || null) === selectedColor
+  );
   if (existing) {
     existing.quantity = (Number(existing.quantity) || 1) + 1;
   } else {
-    cart.push({ ...item, quantity: 1 });
+    cart.push({ ...item, selectedColor, quantity: 1 });
   }
   setLocalStorage(CART_KEY, cart);
 
@@ -59,12 +62,16 @@ function removeFromWishlist(id) {
   renderWishlist();
 }
 
-document.querySelector(".product-list").addEventListener("click", (event) => {
-  const moveBtn = event.target.closest(".wishlist-to-cart");
-  const removeBtn = event.target.closest(".wishlist-remove");
+const wishlistList = document.querySelector(".product-list");
 
-  if (moveBtn) moveToCart(moveBtn.dataset.id);
-  if (removeBtn) removeFromWishlist(removeBtn.dataset.id);
-});
+if (wishlistList) {
+  wishlistList.addEventListener("click", (event) => {
+    const moveBtn = event.target.closest(".wishlist-to-cart");
+    const removeBtn = event.target.closest(".wishlist-remove");
+
+    if (moveBtn) moveToCart(moveBtn.dataset.id);
+    if (removeBtn) removeFromWishlist(removeBtn.dataset.id);
+  });
+}
 
 renderWishlist();

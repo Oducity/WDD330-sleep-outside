@@ -6,14 +6,24 @@ import {
 
 const CART_KEY = "so-cart";
 
+function getItemColorName(item) {
+  return item.selectedColor || item.Colors?.[0]?.ColorName || "";
+}
+
+function getItemKey(item) {
+  return `${item.Id}::${getItemColorName(item)}`;
+}
+
 function cartItemTemplate(item) {
   const quantity = Number(item.quantity) || 1;
   const unitPrice = Number(item.FinalPrice || 0);
   const lineTotal = quantity * unitPrice;
   const image = item.Image || item.Images?.PrimaryMedium || "";
+  const itemKey = getItemKey(item);
+  const multipleClass = quantity > 1 ? " cart-card--multiple" : "";
 
-  return `<li class="cart-card divider" data-id="${item.Id}">
-    <button class="cart-remove" type="button" data-id="${item.Id}" aria-label="Remove ${item.Name}">
+  return `<li class="cart-card divider${multipleClass}" data-id="${item.Id}" data-item-key="${itemKey}">
+    <button class="cart-remove" type="button" data-item-key="${itemKey}" aria-label="Remove ${item.Name}">
       &times;
     </button>
     <a href="/product_pages/index.html?product=${item.Id}" class="cart-card__image">
@@ -22,12 +32,12 @@ function cartItemTemplate(item) {
     <a href="/product_pages/index.html?product=${item.Id}">
       <h2 class="card__name">${item.Name}</h2>
     </a>
-    <p class="cart-card__color">${item.Colors?.[0]?.ColorName || ""}</p>
+    <p class="cart-card__color">${getItemColorName(item)}</p>
 
     <p class="cart-card__quantity">
-      <button class="qty-minus" data-id="${item.Id}">-</button>
-      <span>${quantity}</span>
-      <button class="qty-plus" data-id="${item.Id}">+</button>
+      <button class="qty-button qty-plus" type="button" data-item-key="${itemKey}" aria-label="Increase quantity">+</button>
+      <span class="qty-value">qty ${quantity}</span>
+      <button class="qty-button qty-minus" type="button" data-item-key="${itemKey}" aria-label="Decrease quantity">-</button>
     </p>
 
     <p class="cart-card__price">$${lineTotal.toFixed(2)}</p>
@@ -57,14 +67,15 @@ export default class ShoppingCart {
     return items.reduce((normalized, item) => {
       if (!item || !item.Id || !item.Name) return normalized;
 
-      const existing = normalized.find((product) => product.Id === item.Id);
       const quantity = Number(item.quantity) || 1;
       const image = item.Image || item.Images?.PrimaryMedium || "";
+      const itemColor = getItemColorName(item);
+      const existing = normalized.find((product) => getItemKey(product) === `${item.Id}::${itemColor}`);
 
       if (existing) {
         existing.quantity += quantity;
       } else {
-        normalized.push({ ...item, Image: image, quantity });
+        normalized.push({ ...item, Image: image, selectedColor: itemColor, quantity });
       }
       return normalized;
     }, []);
@@ -104,7 +115,7 @@ export default class ShoppingCart {
 
     if (!items.length) {
       this.listElement.innerHTML =
-        '<li class="cart-empty">There is nothing in the cart</li>';
+        "<li class=\"cart-empty\">There is nothing in the cart</li>";
     } else {
       renderListWithTemplate(cartItemTemplate, this.listElement, items);
     }
@@ -113,9 +124,9 @@ export default class ShoppingCart {
   }
 
   // ➕ AUMENTAR
-  increaseQuantity(id) {
+  increaseQuantity(itemKey) {
     const items = this.getCartItems();
-    const item = items.find((i) => i.Id === id);
+    const item = items.find((i) => getItemKey(i) === itemKey);
     if (item) {
       item.quantity = (item.quantity || 1) + 1;
       this.saveCartItems(items);
@@ -124,14 +135,14 @@ export default class ShoppingCart {
   }
 
   // ➖ DISMINUIR
-  decreaseQuantity(id) {
+  decreaseQuantity(itemKey) {
     const items = this.getCartItems();
-    const item = items.find((i) => i.Id === id);
+    const item = items.find((i) => getItemKey(i) === itemKey);
     if (item) {
       if (item.quantity > 1) {
         item.quantity -= 1;
       } else {
-        this.removeCartItem(id);
+        this.removeCartItem(itemKey);
         return;
       }
       this.saveCartItems(items);
@@ -139,16 +150,16 @@ export default class ShoppingCart {
     }
   }
 
-  removeCartItem(id) {
+  removeCartItem(itemKey) {
     const items = this.normalizeCartItems(this.getCartItems());
-    const existing = items.find((item) => item.Id === id);
+    const existing = items.find((item) => getItemKey(item) === itemKey);
     if (!existing) return;
 
     if (existing.quantity > 1) {
       existing.quantity -= 1;
       this.saveCartItems(items);
     } else {
-      this.saveCartItems(items.filter((item) => item.Id !== id));
+      this.saveCartItems(items.filter((item) => getItemKey(item) !== itemKey));
     }
 
     this.renderCartContents();
@@ -156,28 +167,25 @@ export default class ShoppingCart {
 
   addEventListeners() {
     this.listElement.addEventListener("click", (event) => {
+      const plusButton = event.target.closest(".qty-plus");
+      if (plusButton) {
+        const itemKey = plusButton.dataset.itemKey;
+        if (itemKey) this.increaseQuantity(itemKey);
+        return;
+      }
+
+      const minusButton = event.target.closest(".qty-minus");
+      if (minusButton) {
+        const itemKey = minusButton.dataset.itemKey;
+        if (itemKey) this.decreaseQuantity(itemKey);
+        return;
+      }
 
       // ❌ eliminar
       const removeButton = event.target.closest(".cart-remove");
       if (removeButton) {
-        const id = removeButton.dataset.id;
-        if (id) this.removeCartItem(id);
-        return;
-      }
-
-      // ➕ aumentar
-      const plusButton = event.target.closest(".qty-plus");
-      if (plusButton) {
-        const id = plusButton.dataset.id;
-        if (id) this.increaseQuantity(id);
-        return;
-      }
-
-      // ➖ disminuir
-      const minusButton = event.target.closest(".qty-minus");
-      if (minusButton) {
-        const id = minusButton.dataset.id;
-        if (id) this.decreaseQuantity(id);
+        const itemKey = removeButton.dataset.itemKey;
+        if (itemKey) this.removeCartItem(itemKey);
         return;
       }
 

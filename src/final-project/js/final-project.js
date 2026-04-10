@@ -2,7 +2,7 @@ import { alertMessage, loadHeaderFooter } from "../../js/utils.mjs";
 import { getUserGeo } from "./geo-service.js";
 import { focusPark, initMap, parseParkLatLong, renderParkMarkers, setUserMarker } from "./map-helper.js";
 import { getAlerts, searchParks } from "./nps-service.js";
-// import { getFavorites, isFavorite, toggleFavorite } from "./storage.js";
+import { isFavorite, toggleFavorite } from "./storage.js";
 
 const form = document.querySelector("#park-search-form");
 const resultsSummary = document.querySelector("#results-summary");
@@ -76,6 +76,19 @@ function createDetailLink(url) {
   link.textContent = "Open park website";
   link.className = "park-link";
   return link;
+}
+
+function getParkLabel(park) {
+  return `${isFavorite(park.parkCode) ? "★ " : ""}${park.fullName}`;
+}
+
+function refreshParkNameButtons() {
+  parkResults.querySelectorAll(".park-name-button").forEach((button) => {
+    const selectedPark = currentParks.find((park) => park.parkCode === button.dataset.parkCode);
+    if (selectedPark) {
+      button.textContent = getParkLabel(selectedPark);
+    }
+  });
 }
 // Carousel logic for park page
 function ensureParkCarouselControls() {
@@ -231,6 +244,27 @@ function renderParkDetail(park) {
   if (park.url) {
     detailCard.appendChild(createDetailLink(park.url));
   }
+
+  const actions = document.createElement("div");
+  actions.className = "park-card__actions";
+
+  const favoriteButton = document.createElement("button");
+  favoriteButton.type = "button";
+  favoriteButton.className = "favorite-button";
+
+  const updateFavoriteButton = () => {
+    favoriteButton.textContent = isFavorite(park.parkCode) ? "★ Remove Favorite" : "☆ Add Favorite";
+  };
+
+  updateFavoriteButton();
+  favoriteButton.addEventListener("click", () => {
+    toggleFavorite(park.parkCode);
+    updateFavoriteButton();
+    refreshParkNameButtons();
+  });
+
+  actions.appendChild(favoriteButton);
+  detailCard.appendChild(actions);
 }
 
 function renderResults(parks) {
@@ -268,7 +302,7 @@ function renderResults(parks) {
     nameButton.type = "button";
     nameButton.className = "park-name-button";
     nameButton.dataset.parkCode = park.parkCode;
-    nameButton.textContent = park.fullName;
+    nameButton.textContent = getParkLabel(park);
     item.appendChild(nameButton);
 
     parkResults.appendChild(item);
