@@ -24,9 +24,10 @@ export function initMap(containerId, statusElement) {
   }
 
   map = window.L.map(containerId, { zoomControl: true }).setView([39.5, -98.35], 4);
-  window.L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+  window.L.tileLayer("https://{s}.basemaps.cartocdn.com/light_all/{z}/{x}/{y}{r}.png", {
     maxZoom: 18,
-    attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a>",
+    subdomains: "abcd",
+    attribution: "&copy; <a href=\"https://www.openstreetmap.org/copyright\">OpenStreetMap</a> contributors &copy; <a href=\"https://carto.com/attributions\">CARTO</a>",
   }).addTo(map);
 
   parkLayer = window.L.layerGroup().addTo(map);
