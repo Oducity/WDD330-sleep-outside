@@ -27,9 +27,7 @@ export default class alert{
             const p = document.createElement("p");
             p.classList.add("error-message");
             p.innerText = `Error displaying alert message! Error: ${error.message}`;
-            if (!main) {
-                console.error("<main> element not found");
-            } else {
+            if (main) {
                 main.prepend(p);
             }
         }    
