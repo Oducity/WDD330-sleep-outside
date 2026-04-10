@@ -95,6 +95,46 @@ export async function loadHeaderFooter() {
   const headerElement = document.querySelector("#main-header");
   if (headerElement) {
     renderWithTemplate(headerTemplate, headerElement);
+
+    const projectsMenu = headerElement.querySelector(".projects-menu");
+    if (projectsMenu) {
+      const summary = projectsMenu.querySelector("summary");
+      let isPinnedOpen = false;
+
+      const openMenu = () => projectsMenu.setAttribute("open", "");
+      const closeMenu = () => projectsMenu.removeAttribute("open");
+
+      projectsMenu.addEventListener("mouseenter", () => {
+        if (!isPinnedOpen) {
+          openMenu();
+        }
+      });
+
+      projectsMenu.addEventListener("mouseleave", () => {
+        if (!isPinnedOpen) {
+          closeMenu();
+        }
+      });
+
+      if (summary) {
+        summary.addEventListener("click", (event) => {
+          event.preventDefault();
+          isPinnedOpen = !isPinnedOpen;
+          if (isPinnedOpen) {
+            openMenu();
+          } else {
+            closeMenu();
+          }
+        });
+      }
+
+      document.addEventListener("click", (event) => {
+        if (!projectsMenu.contains(event.target)) {
+          isPinnedOpen = false;
+          closeMenu();
+        }
+      });
+    }
   }
 
   // Load footer
