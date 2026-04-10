@@ -15,11 +15,16 @@ export async function getUserGeo() {
   }
 
   const data = json.data || json;
+  const location = data.location || {};
+  const city = location.city || data.city || {};
+  const region = location.region || data.region || {};
+  const country = location.country || data.country || {};
+
   return {
-    city: data.city?.name || data.city || "Unknown",
-    region: data.region?.name || data.region_name || data.region || "Unknown",
-    country: data.country?.name || data.country_name || data.country || "Unknown",
-    latitude: data.location?.latitude || data.latitude || null,
-    longitude: data.location?.longitude || data.longitude || null,
+    city: city.name || city.name_translated || city || "Unknown",
+    region: region.name || region.name_translated || data.region_name || region || "Unknown",
+    country: country.name || country.name_translated || data.country_name || country || "Unknown",
+    latitude: location.latitude || data.latitude || null,
+    longitude: location.longitude || data.longitude || null,
   };
 }
